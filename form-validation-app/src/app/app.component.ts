@@ -1,23 +1,35 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   loginForm: FormGroup;
   submitted = false;
   showPassword = false;
-  isLoading = false;
 
   constructor(private fb: FormBuilder) {
+
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      password: ['', [Validators.required]]
     });
+
   }
 
   get f() {
@@ -29,18 +41,16 @@ export class AppComponent {
   }
 
   onSubmit() {
+
     this.submitted = true;
 
     if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.isLoading = true;
+    console.log(this.loginForm.value);
 
-    // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-      alert(`Welcome back! Logged in as ${this.loginForm.value.email}`);
-    }, 1500);
+    alert('Login Successful');
   }
 }
